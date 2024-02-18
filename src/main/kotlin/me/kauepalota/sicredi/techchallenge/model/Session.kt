@@ -13,7 +13,7 @@ data class Session(
     val id: Int,
 
     @OneToOne
-    val topic: Topic,
+    var topic: Topic,
 
     @CreationTimestamp
     val creationTimestamp: Instant = Instant.now(),
