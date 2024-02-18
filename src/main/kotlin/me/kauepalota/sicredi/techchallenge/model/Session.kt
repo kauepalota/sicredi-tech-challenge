@@ -12,7 +12,7 @@ data class Session(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Int,
 
-    @OneToOne
+    @ManyToOne
     var topic: Topic,
 
     @CreationTimestamp

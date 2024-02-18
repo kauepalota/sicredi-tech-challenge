@@ -21,7 +21,7 @@ class TopicService(val repository: TopicRepository) {
         return repository.findAll()
     }
 
-    fun createTopic(dto : TopicRequestDto): Topic {
+    fun createTopic(dto: TopicRequestDto): Topic {
         return repository.save(Topic(0, dto.name!!))
     }
 
