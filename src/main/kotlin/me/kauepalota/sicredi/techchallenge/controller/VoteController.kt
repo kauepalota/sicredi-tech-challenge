@@ -52,4 +52,11 @@ class VoteController(val service: VoteService) {
         @PathVariable id: Int,
         @Valid @RequestBody dto: SessionVoteUpdateDto
     ) = service.updateVote(id, dto)
+
+    @DeleteMapping("/{id}")
+    @Operation(summary = "Delete a vote", description = "Delete a vote from the database.")
+    @ApiResponse(responseCode = "204", description = "Vote deleted")
+    @ApiResponse(responseCode = "404", description = "Vote not found")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    fun delete(@PathVariable id: Int) = service.deleteVote(id)
 }

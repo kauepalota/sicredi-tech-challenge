@@ -35,6 +35,10 @@ class TopicService(val repository: TopicRepository) {
     }
 
     fun deleteTopic(id: Int) {
+        if (repository.findById(id).isEmpty) {
+            throw ResourceNotFoundException("Topic with id $id not found.")
+        }
+
         repository.deleteById(id)
     }
 }

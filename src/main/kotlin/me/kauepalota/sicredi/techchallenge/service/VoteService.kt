@@ -54,6 +54,14 @@ class VoteService(val sessionRepository: SessionRepository, val voteRepository: 
         return parse(voteRepository.save(vote))
     }
 
+    fun deleteVote(id: Int) {
+        if (voteRepository.findById(id).isEmpty) {
+            throw ResourceNotFoundException("Vote with id $id not found.")
+        }
+
+        voteRepository.deleteById(id)
+    }
+
     private fun parse(vote: SessionVote) = SessionVoteResponseDto(
         vote.id,
         vote.session.id,
