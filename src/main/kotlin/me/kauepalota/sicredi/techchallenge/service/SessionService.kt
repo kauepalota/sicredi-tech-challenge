@@ -36,8 +36,6 @@ class SessionService(val sessionRepository: SessionRepository, val topicService:
     }
 
     fun updateSession(id: Int, dto: SessionUpdateDto): Session {
-        println(dto)
-
         return sessionRepository.findById(id).map { session ->
             dto.topicId?.let {
                 session.topic = topicService.getTopic(it)
