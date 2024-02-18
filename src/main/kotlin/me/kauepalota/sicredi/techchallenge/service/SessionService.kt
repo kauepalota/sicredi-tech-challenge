@@ -50,6 +50,10 @@ class SessionService(val sessionRepository: SessionRepository, val topicService:
     }
 
     fun deleteSession(id: Int) {
+        if (sessionRepository.findById(id).isEmpty) {
+            throw ResourceNotFoundException("Session with id $id not found.")
+        }
+
         sessionRepository.deleteById(id)
     }
 
