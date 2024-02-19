@@ -2,7 +2,6 @@ version: "3.9"
 services:
   postgres:
     image: "postgres:latest"
-    container_name: "tech-challenge-postgres"
     ports:
       - "5432:5432"
     environment:
@@ -16,7 +15,6 @@ services:
     image: "tech-challenge:1.0.0"
     ports:
       - "${API_PORT}:${API_PORT}"
-    container_name: "tech-challenge-server"
     environment:
       DB_HOST: "${DB_HOST}"
       DB_PORT: "${DB_PORT}"
