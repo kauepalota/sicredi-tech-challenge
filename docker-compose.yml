@@ -1,0 +1,55 @@
+version: "3.9"
+services:
+  postgres:
+    env_file: [".env"]
+    image: "postgres:latest"
+    container_name: "tech-challenge-postgres"
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: "${DB_USER}"
+      POSTGRES_PASSWORD: "${DB_PASSWORD}"
+      POSTGRES_DB: "${DB_NAME}"
+  server:
+    env_file: [".env"]
+    depends_on:
+      - postgres
+      - kafka
+    image: "tech-challenge:1.0.0"
+    ports:
+      - "${API_PORT}:${API_PORT}"
+    container_name: "tech-challenge-server"
+    environment:
+      DB_HOST: "${DB_HOST}"
+      DB_PORT: "${DB_PORT}"
+      DB_NAME: "${DB_NAME}"
+      DB_USER: "${DB_USER}"
+      DB_PASSWORD: "${DB_PASSWORD}"
+      DB_SHOW_SQL: false
+      DB_MAX_CONNECTIONS: 5
+
+      KAFKA_BOOTSTRAP_SERVER: "kafka:9092"
+      KAFKA_GROUP_ID: "tech-challenge"
+
+      SWAGGER_URL: "/docs"
+  zookeeper:
+    image: confluentinc/cp-zookeeper:latest
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    ports:
+      - 22181:2181
+
+  kafka:
+    image: confluentinc/cp-kafka:latest
+    depends_on:
+      - zookeeper
+    ports:
+      - 29092:29092
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092,PLAINTEXT_HOST://localhost:29092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
