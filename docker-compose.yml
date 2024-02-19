@@ -1,7 +1,6 @@
 version: "3.9"
 services:
   postgres:
-    env_file: [".env"]
     image: "postgres:latest"
     container_name: "tech-challenge-postgres"
     ports:
@@ -11,7 +10,6 @@ services:
       POSTGRES_PASSWORD: "${DB_PASSWORD}"
       POSTGRES_DB: "${DB_NAME}"
   server:
-    env_file: [".env"]
     depends_on:
       - postgres
       - kafka
