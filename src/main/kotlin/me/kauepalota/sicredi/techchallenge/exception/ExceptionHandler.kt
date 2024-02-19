@@ -2,11 +2,12 @@ package me.kauepalota.sicredi.techchallenge.exception
 
 import org.apache.coyote.BadRequestException
 import org.springframework.http.HttpStatus
-import org.springframework.http.converter.HttpMessageNotReadableException
+import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.MethodArgumentNotValidException
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestControllerAdvice
+import org.springframework.web.server.ResponseStatusException
 
 @RestControllerAdvice
 class ExceptionHandler {
@@ -24,16 +25,14 @@ class ExceptionHandler {
 
     @ExceptionHandler(MethodArgumentNotValidException::class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    fun handleMethodArgumentNotValidException(e: MethodArgumentNotValidException): ErrorsResponse {
-        return ErrorsResponse(e.bindingResult.fieldErrors.mapNotNull {
-            it.defaultMessage
-        }, HttpStatus.BAD_REQUEST.value())
+    fun handleMethodArgumentNotValidException(e: MethodArgumentNotValidException): List<ErrorResponse> {
+        return ErrorResponse.from(e)
     }
 
-    @ExceptionHandler(HttpMessageNotReadableException::class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    fun handleHttpMessageNotReadableException(e: HttpMessageNotReadableException): ErrorResponse {
-        return ErrorResponse("Malformed JSON request", HttpStatus.BAD_REQUEST.value())
+    @ExceptionHandler(ResponseStatusException::class)
+    fun handleResponseStatusException(e: ResponseStatusException): ResponseEntity<ErrorResponse> {
+        return ResponseEntity.status(e.statusCode)
+            .body(ErrorResponse(e.reason ?: "", e.statusCode.value()))
     }
 
     @ExceptionHandler(ParamNotValidException::class)

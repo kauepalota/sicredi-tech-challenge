@@ -5,7 +5,6 @@ import me.kauepalota.sicredi.techchallenge.dto.SessionResponseDto
 import me.kauepalota.sicredi.techchallenge.dto.SessionUpdateDto
 import me.kauepalota.sicredi.techchallenge.exception.ResourceNotFoundException
 import me.kauepalota.sicredi.techchallenge.model.Session
-import me.kauepalota.sicredi.techchallenge.model.result.SessionResult
 import me.kauepalota.sicredi.techchallenge.model.result.SessionResultData
 import me.kauepalota.sicredi.techchallenge.repository.SessionRepository
 import org.springframework.stereotype.Service
@@ -64,23 +63,7 @@ class SessionService(val sessionRepository: SessionRepository, val topicService:
         session.topic.id,
         session.creationTimestamp,
         session.duration,
-        buildData(session),
+        SessionResultData.from(session),
         session.isOpen()
     )
-
-    private fun buildData(session: Session) : SessionResultData {
-        val yesVotes = session.votes.count { it.choice }
-        val noVotes = session.votes.count { !it.choice }
-
-        return SessionResultData(
-            session.votes.size,
-            yesVotes,
-            noVotes,
-            when {
-                yesVotes > noVotes -> SessionResult.YES
-                yesVotes < noVotes -> SessionResult.NO
-                else -> SessionResult.DRAW
-            }
-        )
-    }
 }
