@@ -1,5 +1,6 @@
 package me.kauepalota.sicredi.techchallenge.dto
 
+import com.fasterxml.jackson.annotation.JsonProperty
 import io.swagger.v3.oas.annotations.media.Schema
 import jakarta.validation.constraints.NotNull
 import jakarta.validation.constraints.Size
@@ -22,12 +23,17 @@ data class SessionVoteUpdateDto(
 )
 
 data class SessionVoteResponseDto(
+    @Schema(description = "The vote identifier", example = "1")
     val id: Int,
 
+    @Schema(description = "The session identifier", example = "1")
+    @JsonProperty("session_id")
     val sessionId: Int,
 
+    @Schema(description = "The affiliated CPF", example = "12345678901")
     val cpf: String,
 
+    @Schema(description = "The vote choice", example = "true")
     val choice: Boolean
 )
 

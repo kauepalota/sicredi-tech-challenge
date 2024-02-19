@@ -22,7 +22,11 @@ data class Session(
     var duration: Long = TimeUnit.MINUTES.toMillis(1),
 
     @OneToMany(fetch = FetchType.EAGER, cascade = [CascadeType.MERGE], mappedBy = "session")
-    var votes: MutableList<SessionVote> = mutableListOf()
+    var votes: MutableList<SessionVote> = mutableListOf(),
+
+    @Column(columnDefinition = "boolean default false")
+    var closed: Boolean = false
 ) {
-    fun isOpen() = creationTimestamp.plusMillis(duration).isAfter(Instant.now())
+    @Transient
+    fun isOpen() = !closed
 }
