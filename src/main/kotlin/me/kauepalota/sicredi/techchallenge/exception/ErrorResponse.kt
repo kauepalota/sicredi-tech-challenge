@@ -11,7 +11,7 @@ data class ErrorResponse(
     @Schema(description = "The error status", example = "999")
     val status: Int
 ) {
-    constructor(error: FieldError) : this(error.defaultMessage ?: "", 400)
+    constructor(error: FieldError) : this("Error in '${error.field}': ${error.defaultMessage}", 400)
 
     companion object {
         fun from(exception: MethodArgumentNotValidException): List<ErrorResponse> {

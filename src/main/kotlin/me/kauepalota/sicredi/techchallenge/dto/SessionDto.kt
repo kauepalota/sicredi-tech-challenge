@@ -9,7 +9,7 @@ import java.time.Instant
 data class SessionCreateDto(
     @Schema(description = "The topic identifier", example = "1", required = true)
     @JsonProperty("topic_id")
-    @field:NotNull(message = "The topic_id must not be null")
+    @field:NotNull(message = "It must not be null")
     val topicId: Int?,
 
     @Schema(description = "The session duration", example = "60000")

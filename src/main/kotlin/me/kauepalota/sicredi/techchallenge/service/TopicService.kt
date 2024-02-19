@@ -4,10 +4,13 @@ import me.kauepalota.sicredi.techchallenge.dto.TopicRequestDto
 import me.kauepalota.sicredi.techchallenge.exception.ResourceNotFoundException
 import me.kauepalota.sicredi.techchallenge.model.Topic
 import me.kauepalota.sicredi.techchallenge.repository.TopicRepository
+import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 
 @Service
 class TopicService(val repository: TopicRepository) {
+    private val logger = LoggerFactory.getLogger(javaClass)
+
     fun getTopic(id: Int): Topic {
         val find = repository.findById(id)
         if (find.isEmpty) {
@@ -22,6 +25,8 @@ class TopicService(val repository: TopicRepository) {
     }
 
     fun createTopic(dto: TopicRequestDto): Topic {
+        logger.info("Creating topic with name ${dto.name}.")
+
         return repository.save(Topic(0, dto.name!!))
     }
 
@@ -40,5 +45,7 @@ class TopicService(val repository: TopicRepository) {
         }
 
         repository.deleteById(id)
+
+        logger.info("Topic with id $id deleted.")
     }
 }

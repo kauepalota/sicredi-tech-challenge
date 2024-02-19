@@ -7,10 +7,13 @@ import me.kauepalota.sicredi.techchallenge.exception.ResourceNotFoundException
 import me.kauepalota.sicredi.techchallenge.model.Session
 import me.kauepalota.sicredi.techchallenge.model.result.SessionResultData
 import me.kauepalota.sicredi.techchallenge.repository.SessionRepository
+import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 
 @Service
 class SessionService(val sessionRepository: SessionRepository, val topicService: TopicService) {
+    private val logger = LoggerFactory.getLogger(javaClass)
+
     fun getSession(id: Int): SessionResponseDto {
         val find = sessionRepository.findById(id)
         if (find.isEmpty) {
@@ -33,6 +36,8 @@ class SessionService(val sessionRepository: SessionRepository, val topicService:
             }
         }
 
+        logger.info("Creating session with id ${session.id} and topic ${session.topic.id}.")
+
         return saveAndParse(session)
     }
 
@@ -52,6 +57,8 @@ class SessionService(val sessionRepository: SessionRepository, val topicService:
         if (sessionRepository.findById(id).isEmpty) {
             throw ResourceNotFoundException("Session with id $id not found.")
         }
+
+        logger.info("Deleting session with id $id.")
 
         sessionRepository.deleteById(id)
     }
