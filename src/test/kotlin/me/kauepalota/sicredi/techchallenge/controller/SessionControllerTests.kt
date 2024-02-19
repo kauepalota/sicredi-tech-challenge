@@ -3,19 +3,18 @@ package me.kauepalota.sicredi.techchallenge.controller
 import com.fasterxml.jackson.databind.ObjectMapper
 import me.kauepalota.sicredi.techchallenge.TestTechChallengeApplication
 import me.kauepalota.sicredi.techchallenge.dto.SessionResponseDto
-import net.datafaker.Faker
-import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.context.annotation.Import
+import org.springframework.test.context.jdbc.Sql
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
-import java.util.*
 
 @Import(TestTechChallengeApplication::class)
+@Sql(scripts = ["/setup.sql"], executionPhase = Sql.ExecutionPhase.BEFORE_TEST_CLASS)
 @AutoConfigureMockMvc
 @SpringBootTest
 class SessionControllerTests {
@@ -24,16 +23,6 @@ class SessionControllerTests {
 
     @Autowired
     private lateinit var objectMapper: ObjectMapper
-
-    companion object {
-        private lateinit var faker: Faker
-
-        @BeforeAll
-        @JvmStatic
-        fun setup() {
-            faker = Faker(Locale("en-US"))
-        }
-    }
 
     @Test
     fun `should return ok when listing all sessions`() {
@@ -113,7 +102,7 @@ class SessionControllerTests {
                 .content("{\"topic_id\": 1}")
                 .accept("application/json")
         )
-            .andExpect { status().isCreated }
+            .andExpect(status().isCreated)
             .andReturn()
             .response.contentAsString
 
