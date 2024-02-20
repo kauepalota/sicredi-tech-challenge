@@ -1,6 +1,6 @@
 # NT Consult Technical Challenge
 
-This project is a solution for the technical challenge proposed by NT Consult. It uses Kotlin, Java, Spring Boot, SQL, and Gradle.
+This project is a solution for the technical challenge proposed by NT Consult. It uses Kotlin, Spring Boot, PostgreSQL, Kafka, Swagger, Test containers and Gradle.
 
 ## How to Run the Project
 
